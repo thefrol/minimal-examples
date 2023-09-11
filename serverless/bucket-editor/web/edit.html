@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Добро пожаловать в Яндекс.Облако</h1>
+<p>Это сервер на Go и Сhi <a href="https://github.com/thefrol">от Дмитрия Фроленко</a></p>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+  
+  import { createApp } from 'https://unpkg.com/petite-vue?module'
+
+  createApp({
+    //custom delimeters
+    $delimiters: ['${', '}'],
+    // exposed to all expressions
+    text: "{{ .Text }}",
+    saved: false,
+    buttonText: "{{ .ButtonText }}",
+    // getters
+    get filepath(){
+      return this.removePrefix("/edit/",window.location.pathname)
+    },
+
+    // methods
+    // increment() {
+    //   this.count++
+    // }
+    showSaved(text){
+      this.infoText=text
+      this.saved=true
+      setTimeout(
+        () => {
+          this.saved=false
+        },
+        4 * 1000
+      );
+    },
+    send(){
+      axios
+        .post('/save/'+this.filepath,this.text)
+        .then(response => {
+          const r = response.data.data
+          this.showSaved("Cохранено")
+        })
+        .catch(error => console.error(error))
+      },
+      removePrefix(prefix, s){
+        const r=new RegExp('^/edit/')
+        return s.replace(r, '')
+      }
+
+    
+  }).mount()
+</script>
+<textarea v-model="text" style="width: 75%; max-width: 600px; height: 700px; max-height:75%; display: block;"></textarea>
+<!-- anywhere on the page -->
+<button @click="send()" style="display: block;">${ buttonText}</button>
+<p v-show="saved">${ this.infoText }</p>
+
+</body>
+</html>

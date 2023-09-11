@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Добро пожаловать в Яндекс.Облако</h1>
+<p>Это сервер на Go и Сhi <a href="https://github.com/thefrol">от Дмитрия Фроленко</a>. Если тут работает счетчек, значит petite vue работает нормально</p>
+
+<script src="https://unpkg.com/petite-vue" defer init></script>
+
+<!-- anywhere on the page -->
+<div v-scope="{ count: 0 }">
+  {{ count }}
+  <button @click="count++">inc</button>
+</div>
+
+</body>
+</html>
